@@ -1,0 +1,15 @@
+{
+  "routes": {
+    "/": {},
+    "/adoracion": {},
+    "/adoracion/buscar-canciones": {},
+    "/adoracion/crear-repertorio": {},
+    "/auth": {},
+    "/auth/login": {},
+    "/auth/register": {},
+    "/dashboard": {},
+    "/multimedia": {},
+    "/multimedia/editar-diapositivas": {},
+    "/multimedia/listar-repertorios": {}
+  }
+}

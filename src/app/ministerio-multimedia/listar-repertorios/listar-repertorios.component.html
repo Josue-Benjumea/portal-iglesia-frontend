@@ -1,0 +1,49 @@
+<div class="app-container">
+  <div class="background-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <!-- Eliminamos la navbar de aquí -->
+
+  <div class="content-container">
+    <div class="main-card">
+      <h2>Repertorios Pendientes de Edición</h2>
+      <p>Seleccione un repertorio para editar sus diapositivas</p>
+      
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+      
+      <div *ngIf="!loading && repertorios.length === 0" class="no-data">
+        <mat-icon>playlist_remove</mat-icon>
+        <p>No hay repertorios pendientes de edición</p>
+      </div>
+      
+      <div *ngIf="!loading && repertorios.length > 0" class="items-grid">
+        <div *ngFor="let repertorio of repertorios; let i = index" class="interactive-card" [ngClass]="'card-' + (i % 3 + 1)">
+          <div class="profile-circle">
+            <mat-icon>event</mat-icon>
+          </div>
+          <h3 class="card-title">{{ formatDate(repertorio.fecha_programada) }}</h3>
+          <p class="card-subtitle">{{ repertorio.nombre }} {{ repertorio.apellido }}</p>
+          
+          <div class="card-status" [ngClass]="{'estado-pendiente': repertorio.estado === 'pendiente', 'estado-en-proceso': repertorio.estado === 'en_proceso', 'estado-listo': repertorio.estado === 'listo'}">
+            <span>{{ repertorio.estado | titlecase }}</span>
+          </div>
+          
+          <button mat-icon-button class="edit-button" (click)="editarRepertorio(repertorio.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button mat-raised-button color="primary" class="action-button" (click)="cargarRepertorios()">
+          <mat-icon>refresh</mat-icon> Actualizar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

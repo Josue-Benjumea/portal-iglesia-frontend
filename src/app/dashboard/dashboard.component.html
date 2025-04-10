@@ -1,0 +1,91 @@
+<div class="app-container">
+  <div class="background-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+
+
+  <div class="content-container">
+    <div class="main-card">
+      <h2>Bienvenido al Portal de la Iglesia</h2>
+      <p>Seleccione una opción para comenzar</p>
+      
+      <div class="user-info-card">
+        <div class="user-avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="user-details">
+          <h3>{{ userName }}</h3>
+          <span class="ministerio-badge">{{ userMinisterio }}</span>
+        </div>
+      </div>
+      
+      <div class="dashboard-modules">
+        <ng-container *ngIf="userMinisterio === 'Ministerio de adoración'">
+          <div class="module-card card-1">
+            <div class="module-icon">
+              <mat-icon>search</mat-icon>
+            </div>
+            <div class="module-content">
+              <h3>Buscar Canciones</h3>
+              <p>Explore la biblioteca de canciones disponibles</p>
+              <button mat-raised-button routerLink="/adoracion/buscar-canciones">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+          
+          <div class="module-card card-2">
+            <div class="module-icon">
+              <mat-icon>playlist_add</mat-icon>
+            </div>
+            <div class="module-content">
+              <h3>Crear Repertorio</h3>
+              <p>Prepare un nuevo repertorio para el servicio</p>
+              <button mat-raised-button routerLink="/adoracion/crear-repertorio">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+        
+        <ng-container *ngIf="userMinisterio === 'Ministerio de multimedia'">
+          <div class="module-card card-1">
+            <div class="module-icon">
+              <mat-icon>list</mat-icon>
+            </div>
+            <div class="module-content">
+              <h3>Ver Repertorios</h3>
+              <p>Gestione los repertorios pendientes</p>
+              <button mat-raised-button routerLink="/multimedia/listar-repertorios">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+          
+          <div class="module-card card-2">
+            <div class="module-icon">
+              <mat-icon>slideshow</mat-icon>
+            </div>
+            <div class="module-content">
+              <h3>Editar Diapositivas</h3>
+              <p>Personalice las diapositivas para el servicio</p>
+              <button mat-raised-button routerLink="/multimedia/editar-diapositivas">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      
+      <div class="logout-section">
+        <button mat-raised-button color="warn" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

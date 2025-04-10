@@ -1,0 +1,206 @@
+.buscar-canciones-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.toolbar {
+  background: linear-gradient(45deg, #2196F3, #3F51B5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+  
+  button {
+    margin-right: 16px;
+  }
+}
+
+.content-container {
+  display: flex;
+  padding: 24px;
+  gap: 24px;
+  flex: 1;
+  max-width: 1200px;
+  width: 90%;
+  margin: 24px auto;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 120px);
+  
+  @media (max-width: 992px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.search-section, .seleccionadas-section {
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  width: 100%;
+  min-height: 500px;
+  height: auto;
+  
+  h2 {
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 24px;
+  }
+}
+
+.search-field {
+  width: 100%;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.resultados-list, .seleccionadas-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 400px;
+  
+  h3 {
+    color: #3F51B5;
+    margin-bottom: 16px;
+  }
+}
+
+.resultado-item, .seleccionada-item {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 12px !important;
+  border-bottom: 1px solid #eee;
+  padding: 12px 0 !important;
+  height: auto !important;
+  
+  .album-cover {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    margin-right: 16px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .cancion-info {
+    flex: 1;
+    overflow: hidden;
+    padding-right: 16px;
+    
+    h4 {
+      margin: 0;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    small {
+      display: block;
+      color: #999;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  button {
+    flex-shrink: 0;
+  }
+}
+
+.no-resultados, .no-seleccionadas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  
+  p {
+    margin: 0;
+    color: #666;
+  }
+}
+
+.actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  
+  button {
+    padding: 8px 24px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    mat-icon {
+      margin-left: 8px;
+    }
+  }
+}
+
+// Estilos adicionales para mejorar la responsividad
+@media (max-width: 768px) {
+  .content-container {
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .search-section, .seleccionadas-section {
+    padding: 16px;
+  }
+  
+  .resultados-list, .seleccionadas-list {
+    max-height: 300px;
+  }
+  
+  .actions {
+    button {
+      width: 100%;
+    }
+  }
+}
+
+// Ajustes para el componente mat-list-item de Angular Material
+::ng-deep .mat-mdc-list-item-unscoped-content {
+  display: flex;
+  width: 100%;
+}

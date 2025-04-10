@@ -1,0 +1,124 @@
+.global-navbar {
+  background: linear-gradient(90deg, #1a237e, #0d47a1, #01579b) !important;
+  color: rgb(255, 255, 255) !important;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(49, 49, 49, 0.075);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.281);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px;
+  height: 64px;
+}
+
+.navbar-left, .navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.app-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-left: 8px;
+  background: linear-gradient(90deg, #ffffff, #e3f2fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  
+  mat-icon {
+    margin-right: 8px;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+button {
+  color: white;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.014);
+  }
+}
+
+@media (max-width: 768px) {
+  .user-info {
+    display: none;
+  }
+  
+  .app-title {
+    font-size: 1.2rem;
+  }
+}
+
+// Añadir estos estilos al final del archivo
+:host ::ng-deep .mat-menu-panel {
+  background: linear-gradient(135deg, #1a237e, #0d47a1);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgb(255, 255, 255);
+  overflow: hidden;
+  
+  .mat-menu-content {
+    padding: 0;
+  }
+  
+  .mat-menu-item {
+    color: white;
+    font-weight: 500;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .mat-icon {
+      color: white;
+      margin-right: 8px;
+    }
+  }
+}
+
+
+// Estilos para la navbar en páginas de autenticación
+.auth-page-navbar {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+  position: absolute !important; // Cambiar de sticky a absolute
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  
+  .app-title {
+    background: linear-gradient(90deg, #ffffff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  
+  .navbar-container {
+    background-color: transparent !important;
+  }
+  
+  button {
+    background-color: transparent !important;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+}

@@ -1,0 +1,302 @@
+<div class="editar-diapositivas-container">
+  <mat-toolbar color="primary" class="toolbar">
+    <button mat-icon-button (click)="volver()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>Editar Diapositivas</span>
+  </mat-toolbar>
+
+  <div class="content-container">
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    
+    <ng-container *ngIf="!loading">
+      <!-- Lista de canciones -->
+      <div *ngIf="!cancionSeleccionada" class="canciones-list-container">
+        <h2>Canciones del Repertorio</h2>
+        <p>Seleccione una canción para editar sus diapositivas</p>
+        
+        <div class="canciones-list">
+          <mat-card *ngFor="let cancion of canciones" class="cancion-card" (click)="seleccionarCancion(cancion)">
+            <mat-card-header>
+              <mat-icon mat-card-avatar>music_note</mat-icon>
+              <mat-card-title>{{ cancion.titulo }}</mat-card-title>
+              <mat-card-subtitle>{{ cancion.artista }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p [ngClass]="{'estado-pendiente': cancion.estado === 'pendiente', 'estado-en-proceso': cancion.estado === 'en_proceso', 'estado-listo': cancion.estado === 'lista'}">
+                Estado: {{ cancion.estado | titlecase }}
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button color="primary">
+                <mat-icon>edit</mat-icon> Editar Diapositivas
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+        
+        <div class="actions">
+          <button mat-raised-button color="primary" [disabled]="!canMarcarRepertorioCompleto()" (click)="marcarRepertorioCompleto()">
+            <mat-icon>check_circle</mat-icon> Marcar Repertorio como Completo
+          </button>
+        </div>
+      </div>
+      
+      <!-- Editor de diapositivas -->
+      <div *ngIf="cancionSeleccionada && !modoVistaPrevia" class="editor-container">
+        <div class="editor-header">
+          <h2>Editando: {{ cancionSeleccionada.titulo }}</h2>
+          <p>Artista: {{ cancionSeleccionada.artista }}</p>
+        </div>
+        
+        <div *ngIf="buscandoLetra" class="loading-spinner">
+          <mat-spinner diameter="30"></mat-spinner>
+          <p>Buscando letra automáticamente...</p>
+        </div>
+        
+        <div *ngIf="modoEdicion" class="editor-content">
+          <div class="diapositivas-list">
+            <h3>Diapositivas</h3>
+            <div class="diapositivas-thumbnails">
+              <div *ngFor="let diapositiva of diapositivas; let i = index" 
+                   class="diapositiva-thumbnail" 
+                   [ngClass]="{'active': i === diapositivaActual}"
+                   (click)="cambiarDiapositiva(i)">
+                <div class="thumbnail-number">{{ i + 1 }}</div>
+                <div class="thumbnail-content">
+                  <p>{{ diapositiva.contenido | slice:0:30 }}{{ diapositiva.contenido.length > 30 ? '...' : '' }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="diapositivas-actions">
+              <button mat-mini-fab color="primary" (click)="nuevaDiapositiva()" matTooltip="Nueva diapositiva">
+                <mat-icon>add</mat-icon>
+              </button>
+              <button mat-mini-fab color="accent" (click)="duplicarDiapositiva()" matTooltip="Duplicar diapositiva">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              <button mat-mini-fab color="warn" (click)="eliminarDiapositiva()" matTooltip="Eliminar diapositiva">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-mini-fab (click)="moverDiapositiva('arriba')" matTooltip="Mover arriba" [disabled]="diapositivaActual === 0">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button mat-mini-fab (click)="moverDiapositiva('abajo')" matTooltip="Mover abajo" [disabled]="diapositivaActual === diapositivas.length - 1">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+            </div>
+          </div>
+          
+          <div class="editor-main">
+            <!-- Agregar binding del índice seleccionado -->
+            <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+              <!-- Find the tabs section in your template and update it -->
+              
+              <mat-tab label="Contenido">
+                <div class="editor-form">
+                  <form [formGroup]="editorForm">
+                    <mat-form-field appearance="outline" class="editor-field">
+                      <mat-label>Contenido de la diapositiva</mat-label>
+                      <textarea matInput formControlName="contenido" rows="10"></textarea>
+                    </mat-form-field>
+                  </form>
+                </div>
+              </mat-tab>
+              
+              <mat-tab label="Formato de Texto">
+                <div class="format-controls">
+                  <!-- Make sure this entire section is inside a form with [formGroup] -->
+                  <form [formGroup]="editorForm" class="format-grid">
+                    <!-- Column 1: Font Family and Size -->
+                    <div class="format-column">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Fuente</mat-label>
+                        <mat-select formControlName="fontFamily">
+                          <mat-option *ngFor="let font of fontFamilies" [value]="font.value">
+                            {{ font.label }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      
+                      <mat-form-field appearance="outline">
+                        <mat-label>Tamaño</mat-label>
+                        <mat-select formControlName="fontSize">
+                          <mat-option *ngFor="let size of fontSizes" [value]="size.value">
+                            {{ size.label }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    
+                    <!-- Column 2: Typography and Alignment -->
+                    <div class="format-column">
+                      <div class="text-style-controls">
+                        <mat-button-toggle-group class="full-width" multiple>
+                          <mat-button-toggle [checked]="editorForm.value.fontWeight" 
+                                             (change)="editorForm.patchValue({fontWeight: !editorForm.value.fontWeight})"
+                                             value="bold">
+                            <mat-icon>format_bold</mat-icon>
+                          </mat-button-toggle>
+                          <mat-button-toggle [checked]="editorForm.value.fontStyle"
+                                             (change)="editorForm.patchValue({fontStyle: !editorForm.value.fontStyle})"
+                                             value="italic">
+                            <mat-icon>format_italic</mat-icon>
+                          </mat-button-toggle>
+                          <mat-button-toggle [checked]="editorForm.value.textDecoration"
+                                             (change)="editorForm.patchValue({textDecoration: !editorForm.value.textDecoration})"
+                                             value="underline">
+                            <mat-icon>format_underlined</mat-icon>
+                          </mat-button-toggle>
+                        </mat-button-toggle-group>
+                      </div>
+                      
+                      <div class="text-align-controls">
+                        <label>Alineación:</label>
+                        <mat-button-toggle-group formControlName="textAlign">
+                          <mat-button-toggle *ngFor="let align of textAlignments" [value]="align.value">
+                            <mat-icon>{{ align.icon }}</mat-icon>
+                          </mat-button-toggle>
+                        </mat-button-toggle-group>
+                      </div>
+                    </div>
+                    
+                    <!-- Column 3: Text Color Picker -->
+                    <div class="format-column">
+                      <div class="text-color-picker">
+                        <label>Color del texto:</label>
+                        <input type="color" formControlName="textColor" class="color-input">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </mat-tab>
+              
+              <mat-tab label="Fondo">
+                <div class="background-controls">
+                  <form [formGroup]="editorForm">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Tipo de fondo</mat-label>
+                      <mat-select formControlName="backgroundType">
+                        <mat-option value="color">Color sólido</mat-option>
+                        <mat-option value="gradient">Degradado</mat-option>
+                        <mat-option value="image">Imagen</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    
+                    <!-- Color background -->
+                    <div *ngIf="editorForm.value.backgroundType === 'color'" class="color-picker">
+                      <label>Color de fondo:</label>
+                      <input type="color" formControlName="backgroundColor" class="color-input">
+                    </div>
+                    
+                    <!-- Gradient controls -->
+                    <ng-container *ngIf="editorForm.value.backgroundType === 'gradient'">
+                      <div class="gradient-controls">
+                        <div class="color-picker">
+                          <label>Color inicial:</label>
+                          <input type="color" formControlName="gradientStart">
+                        </div>
+                        <div class="color-picker">
+                          <label>Color final:</label>
+                          <input type="color" formControlName="gradientEnd">
+                        </div>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Dirección</mat-label>
+                          <mat-select formControlName="gradientDirection">
+                            <mat-option value="to bottom">Arriba a abajo</mat-option>
+                            <mat-option value="to right">Izquierda a derecha</mat-option>
+                            <mat-option value="to bottom right">Diagonal</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </ng-container>
+                    
+                    <!-- Image controls -->
+                    <div *ngIf="editorForm.value.backgroundType === 'image'">
+                      <div class="image-upload">
+                        <button mat-raised-button color="primary" (click)="subirImagenFondo()">
+                          <mat-icon>cloud_upload</mat-icon> Subir imagen
+                        </button>
+                        <input type="file" #fileInput style="display: none" accept="image/*" (change)="onFileSelected($event)">
+                      </div>
+                      
+                      <div *ngIf="recursos.imagenes.length > 0" class="image-gallery">
+                        <h4>Imágenes disponibles</h4>
+                        <div class="image-thumbnails">
+                          <div *ngFor="let imagen of recursos.imagenes" 
+                                 class="image-thumbnail" 
+                                 [ngClass]="{'active': editorForm.value.backgroundImage === imagen.path}"
+                                 (click)="seleccionarImagenExistente(imagen.path)">
+                            <img [src]="environment.apiUrl + '/' + imagen.path" 
+                                   [alt]="imagen.name"
+                                   onerror="this.style.display='none'">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+            
+            <!-- Add this after the editor form in the Contenido tab -->
+            <div class="preview-box" [ngStyle]="getBackgroundStyle()" style="width: 100%; height: 300px; border: 1px solid #ccc; overflow: hidden;">
+              <div class="preview-content" [ngStyle]="getTextStyle()" style="padding: 20px; height: 100%; display: flex; align-items: center; justify-content: center;">
+                {{ editorForm.value.contenido }}
+              </div>
+            </div>
+            
+            <div class="editor-actions">
+              <button mat-raised-button color="accent" (click)="toggleVistaPrevia()">
+                <mat-icon>visibility</mat-icon> Vista Previa
+              </button>
+              <button mat-raised-button color="primary" (click)="guardarCambios()">
+                <mat-icon>save</mat-icon> Guardar Diapositivas
+              </button>
+              <button mat-raised-button (click)="cancelarEdicion()">
+                <mat-icon>cancel</mat-icon> Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Vista previa de diapositivas -->
+      <div *ngIf="cancionSeleccionada && modoVistaPrevia" class="preview-container">
+        <div class="preview-header">
+          <h2>Vista Previa: {{ cancionSeleccionada.titulo }}</h2>
+          <p>Artista: {{ cancionSeleccionada.artista }}</p>
+        </div>
+        
+        <!-- Find the preview slide section and update it to this -->
+        <div class="preview-slide" [ngStyle]="getBackgroundStyle()">
+          <div class="preview-content" [ngStyle]="getTextStyle()">
+            {{ diapositivas[diapositivaActual]?.contenido }}
+          </div>
+        </div>
+        
+        <div class="preview-controls">
+          <button (click)="cambiarDiapositiva(diapositivaActual - 1)" [disabled]="diapositivaActual === 0">
+            <mat-icon>navigate_before</mat-icon>
+          </button>
+          
+          <button (click)="cambiarDiapositiva(diapositivaActual + 1)" [disabled]="diapositivaActual === diapositivas.length - 1">
+            <mat-icon>navigate_next</mat-icon>
+          </button>
+          <span class="slide-counter">{{ diapositivaActual + 1 }} / {{ diapositivas.length }}</span>
+        </div>
+        
+        <div class="preview-actions">
+          <button mat-raised-button color="primary" (click)="toggleVistaPrevia()">
+            <mat-icon>edit</mat-icon> Volver al Editor
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Input oculto para subir imágenes -->
+<input type="file" #fileInput style="display: none" accept="image/*" (change)="onFileSelected($event)">

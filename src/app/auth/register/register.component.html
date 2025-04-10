@@ -1,0 +1,119 @@
+<div class="register-container">
+  <!-- Contenedor de imagen y aura como fondo -->
+  <div class="image-container">
+    <div class="aura aura-1"></div>
+    <div class="aura aura-2"></div>
+    <div class="aura aura-3"></div>
+    <div class="logo-circle">
+      <img src="assets/images/Logo_login.jpg" alt="Logo CCRI">
+    </div>
+  </div>
+  
+  <div class="register-card">
+    <div class="register-form-container">
+      <div class="logo-container">
+        <img src="assets/images/Logo_Iglesia.jpg" alt="Logo CCRI" class="logo">
+        <h1>Centro Cristiano de Restauración Internacional</h1>
+      </div>
+      
+      <h2>Registro de Usuario</h2>
+      
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre">
+            <mat-error *ngIf="submitted && f['nombre'].errors">
+              El nombre es requerido
+            </mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="apellido" >
+            <mat-error *ngIf="submitted && f['apellido'].errors">
+              El apellido es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Edad</mat-label>
+            <input matInput type="number" formControlName="edad">
+            <mat-error *ngIf="submitted && f['edad'].errors">
+              <span *ngIf="f['edad'].errors['required']">La edad es requerida</span>
+              <span *ngIf="f['edad'].errors['min'] || f['edad'].errors['max']">La edad debe estar entre 1 y 120</span>
+            </mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Cédula</mat-label>
+            <input matInput formControlName="cedula" >
+            <mat-error *ngIf="submitted && f['cedula'].errors">
+              <span *ngIf="f['cedula'].errors['required']">La cédula es requerida</span>
+              <span *ngIf="f['cedula'].errors['pattern']">La cédula debe contener solo números</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" >
+            <mat-error *ngIf="submitted && f['email'].errors">
+              <span *ngIf="f['email'].errors['required']">El email es requerido</span>
+              <span *ngIf="f['email'].errors['email']">Ingrese un email válido</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" aria-label="Toggle password visibility">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="submitted && f['password'].errors">
+              <span *ngIf="f['password'].errors['required']">La contraseña es requerida</span>
+              <span *ngIf="f['password'].errors['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+            </mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Confirmar Contraseña</mat-label>
+            <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword">
+            <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button" aria-label="Toggle password visibility">
+              <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="submitted && f['confirmPassword'].errors">
+              <span *ngIf="f['confirmPassword'].errors['required']">Confirme su contraseña</span>
+              <span *ngIf="f['confirmPassword'].errors['mustMatch']">Las contraseñas no coinciden</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Ministerio</mat-label>
+          <mat-select formControlName="ministerio"  panelClass="custom-select-panel">
+            <mat-option *ngFor="let ministerio of ministerios" [value]="ministerio">
+              {{ ministerio }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="submitted && f['ministerio'].errors">
+            Seleccione un ministerio
+          </mat-error>
+        </mat-form-field>
+        
+        <div class="form-actions">
+          <button mat-raised-button type="submit" [disabled]="loading" class="submit-button">
+            <span *ngIf="loading" class="spinner"></span>
+            Registrarse
+          </button>
+          <a mat-button routerLink="/auth/login" class="login-link">¿Ya tienes cuenta? Inicia sesión</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

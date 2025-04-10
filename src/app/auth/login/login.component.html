@@ -1,0 +1,49 @@
+<div class="login-container">
+  <!-- Contenedor de imagen y aura como fondo -->
+  <div class="image-container">
+    <div class="aura aura-1"></div>
+    <div class="aura aura-2"></div>
+    <div class="aura aura-3"></div>
+    <div class="logo-circle">
+      <img [src]="logoPath2" alt="Logo CCRI">
+    </div>
+  </div>
+  
+  <div class="login-card">
+    <div class="login-form-container">
+      <div class="logo-container">
+        <img [src]="logoPath" alt="Logo CCRI" class="logo">
+        <h1>Centro Cristiano de Restauración Internacional</h1>
+      </div>
+      
+      <h2>Iniciar Sesión</h2>
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cédula</mat-label>
+          <input matInput formControlName="cedula">
+          <mat-error *ngIf="submitted && f['cedula'].errors">
+            <span *ngIf="f['cedula'].errors['required']">La cédula es requerida</span>
+            <span *ngIf="f['cedula'].errors['pattern']">La cédula debe contener solo números</span>
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password">
+          <mat-error *ngIf="submitted && f['password'].errors">
+            La contraseña es requerida
+          </mat-error>
+        </mat-form-field>
+        
+        <div class="form-actions">
+          <button mat-raised-button type="submit" [disabled]="loading" class="submit-button">
+            <span *ngIf="loading" class="spinner"></span>
+            Iniciar Sesión
+          </button>
+          <a mat-button routerLink="/auth/register" class="register-link">¿No tienes cuenta? Regístrate</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

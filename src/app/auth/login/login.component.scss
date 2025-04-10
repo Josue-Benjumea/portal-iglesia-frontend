@@ -1,0 +1,414 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0;
+  background-color: #1d1d1f;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  max-width: 100%;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+/* Contenedor de aura e imagen - ahora como fondo */
+.image-container {
+  width: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1d1d1f;
+  overflow: hidden;
+  animation: fadeIn 1s ease-out;
+  z-index: 0; /* Colocado detrás del formulario */
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+  }
+  
+  .logo-circle {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 50px rgba(33, 150, 243, 0.5);
+    animation: pulse 3s infinite alternate;
+    z-index: 2;
+    
+    @media (max-width: 768px) {
+      width: 180px;
+      height: 180px;
+    }
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .aura {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: 1;
+    
+    &-1 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #2196F3 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      
+      @media (max-width: 768px) {
+        width: 300px;
+        height: 300px;
+      }
+    }
+    
+    &-2 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #3F51B5 0%, transparent 70%);
+      animation: rotate 30s linear infinite reverse;
+      
+      @media (max-width: 768px) {
+        width: 450px;
+        height: 450px;
+      }
+    }
+    
+    &-3 {
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, #1a237e 0%, transparent 70%);
+      animation: rotate 40s linear infinite;
+      
+      @media (max-width: 768px) {
+        width: 600px;
+        height: 600px;
+      }
+    }
+  }
+}
+
+.login-form-container {
+  width: 50%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(30, 30, 32, 0); /* Ligeramente más transparente */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Para Safari */
+  animation: slideInLeft 0.8s ease-out;
+  position: relative;
+  z-index: 2; /* Por encima del fondo */
+  box-shadow: none; /* Eliminado para quitar el margen visual */
+  border-radius: 0;
+  margin: 0; /* Asegurar que no hay margen */
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: 100vh;
+    padding: 30px 20px;
+    border-radius: 0;
+    background-color: rgba(30, 30, 32, 0.92); /* Más opaco en móvil */
+  }
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  
+  .logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+    
+    @media (max-width: 768px) {
+      width: 100px;
+    }
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: white;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.4;
+    
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+h2 {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 15px;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #2196F3, #3F51B5);
+    border-radius: 3px;
+  }
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    gap: 15px;
+  }
+}
+
+.full-width {
+  width: 100%;
+  
+  ::ng-deep .mat-form-field-wrapper {
+    background-color: transparent !important;
+    border-radius: 8px;
+    padding: 0 !important;
+    position: relative;
+    overflow: visible;
+  }
+  
+  /* Ocultar completamente los bordes nativos y aplicar color blanco semitransparente */
+  ::ng-deep .mdc-notched-outline,
+  ::ng-deep .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,
+  ::ng-deep .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing,
+  ::ng-deep .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch {
+    border-color: rgba(255, 255, 255, 0.452) !important;
+  }
+  
+  /* Hacer que TODOS los labels sean blancos - usando los mismos selectores que en register */
+  ::ng-deep .mat-form-field-label,
+  ::ng-deep .mat-form-field-label-wrapper .mat-form-field-label,
+  ::ng-deep .mat-form-field-empty.mat-form-field-label,
+  ::ng-deep .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label,
+  ::ng-deep .mat-mdc-floating-label,
+  ::ng-deep .mdc-floating-label,
+  ::ng-deep label.mat-mdc-form-field-label {
+    color: white !important;
+    opacity: 1 !important;
+  }
+  
+  /* Asegurar que los labels flotantes también sean blancos */
+  ::ng-deep .mdc-text-field--focused .mdc-floating-label,
+  ::ng-deep .mdc-text-field--label-floating .mdc-floating-label {
+    color: white !important;
+  }
+  
+  /* Selector adicional para cubrir todos los casos de labels */
+  ::ng-deep label#mat-mdc-form-field-label-0,
+  ::ng-deep label[id^="mat-mdc-form-field-label"] {
+    color: white !important;
+  }
+  
+  ::ng-deep input, ::ng-deep .mat-select-value {
+    color: white !important;
+    font-size: 16px !important; /* Evita zoom en móviles */
+  }
+  
+  /* Estilos actualizados para el select */
+  ::ng-deep .mat-mdc-select-value-text {
+    color: white !important;
+  }
+  
+  /* Arreglo para el fondo blanco y texto negro en autocompletado */
+  ::ng-deep .mat-form-field-autofill-control {
+    -webkit-text-fill-color: white !important;
+    box-shadow: 0 0 0px 1000px rgba(0, 0, 255, 0.3) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  
+  ::ng-deep .mat-input-element {
+    caret-color: white !important;
+  }
+  
+  /* Mejora para el autocompletado del navegador */
+  ::ng-deep input:-webkit-autofill,
+  ::ng-deep input:-webkit-autofill:hover, 
+  ::ng-deep input:-webkit-autofill:focus,
+  ::ng-deep input:-webkit-autofill:active {
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(117, 117, 117, 0.048) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    caret-color: white !important;
+  }
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  gap: 15px;
+  
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: linear-gradient(45deg, #2196F3, #3F51B5);
+  color: white;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  
+  &:hover:not([disabled]) {
+    background: linear-gradient(45deg, #3F51B5, #2196F3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.register-link {
+  color: #9c27b0 !important; /* Añadido !important para forzar el color */
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 500;
+  
+  &:hover {
+    color: #7b1fa2 !important; /* También forzado para el hover */
+    text-decoration: underline;
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 30px rgba(33, 150, 243, 0.5);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 70px rgba(33, 150, 243, 0.8);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .login-form-container {
+    padding: 30px 20px;
+  }
+  
+  .logo-container .logo {
+    width: 100px;
+  }
+  
+  h1 {
+    font-size: 1.2rem;
+  }
+}
+
+.error-container {
+  min-height: 20px; /* Espacio reservado para el mensaje de error */
+}

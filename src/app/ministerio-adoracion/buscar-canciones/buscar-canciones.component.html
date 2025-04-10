@@ -1,0 +1,72 @@
+<div class="buscar-canciones-container">
+
+  <div class="content-container">
+    <div class="search-section">
+      <h2>Buscar Canciones para el Repertorio</h2>
+      <p>Ingrese el nombre de la canción o artista para buscar</p>
+      
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar canciones</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Ej: Preciosa Sangre">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+      
+      <div *ngIf="resultados.length > 0" class="resultados-list">
+        <h3>Resultados de la búsqueda</h3>
+        <mat-list>
+          <mat-list-item *ngFor="let cancion of resultados" class="resultado-item">
+            <div class="album-cover" *ngIf="cancion.album?.cover">
+              <img [src]="cancion.album.cover" [alt]="cancion.album.title">
+            </div>
+            <div class="cancion-info">
+              <h4>{{ cancion.title }}</h4>
+              <p>{{ cancion.artist.name }}</p>
+              <small *ngIf="cancion.album?.title">{{ cancion.album.title }}</small>
+            </div>
+            <button mat-mini-fab color="primary" (click)="seleccionarCancion(cancion)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      
+      <div *ngIf="!loading && resultados.length === 0 && searchControl.value" class="no-resultados">
+        <p>No se encontraron resultados para "{{ searchControl.value }}"</p>
+      </div>
+    </div>
+    
+    <div class="seleccionadas-section">
+      <h2>Canciones Seleccionadas</h2>
+      
+      <div *ngIf="cancionesSeleccionadas.length === 0" class="no-seleccionadas">
+        <p>Aún no ha seleccionado ninguna canción</p>
+      </div>
+      
+      <mat-list *ngIf="cancionesSeleccionadas.length > 0" class="seleccionadas-list">
+        <mat-list-item *ngFor="let cancion of cancionesSeleccionadas; let i = index" class="seleccionada-item">
+          <div class="album-cover" *ngIf="cancion.album?.cover">
+            <img [src]="cancion.album.cover" [alt]="cancion.album.title">
+          </div>
+          <div class="cancion-info">
+            <h4>{{ cancion.title }}</h4>
+            <p>{{ cancion.artist.name }}</p>
+          </div>
+          <button mat-mini-fab color="warn" (click)="eliminarCancion(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+      
+      <div class="actions">
+        <button mat-raised-button color="primary" [disabled]="cancionesSeleccionadas.length === 0" (click)="continuarCreacion()">
+          Continuar
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
